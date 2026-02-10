@@ -8,3 +8,4 @@ const supabaseKey = process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6Ikp
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
 export const TABLE_NAME = 'study_sessions';
+export const DENEME_TABLE_NAME = 'deneme_results';

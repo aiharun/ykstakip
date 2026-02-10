@@ -1,31 +1,324 @@
 <!DOCTYPE html>
 <html lang="tr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>YKS Pro - Akıllı Çalışma Takipçisi</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-      body {
-        font-family: 'Inter', sans-serif;
-        background-color: #f3f4f6;
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YKS Pro - Akıllı Çalışma Takipçisi</title>
+  <meta name="description"
+    content="YKS sınavına hazırlanan öğrenciler için AI destekli akıllı çalışma takip ve analiz platformu." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0a1a;
+      --bg-secondary: #111127;
+      --bg-card: rgba(255, 255, 255, 0.04);
+      --bg-card-hover: rgba(255, 255, 255, 0.07);
+      --border-glass: rgba(255, 255, 255, 0.08);
+      --text-primary: #f1f1f8;
+      --text-secondary: #9ca3af;
+      --accent-indigo: #818cf8;
+      --accent-violet: #a78bfa;
+      --accent-emerald: #34d399;
+      --accent-rose: #fb7185;
+      --accent-amber: #fbbf24;
+      --glow-indigo: rgba(129, 140, 248, 0.15);
+      --glow-violet: rgba(167, 139, 250, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(145deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, #0d0d24 100%);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* Glass card */
+    .glass {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-glass);
+      border-radius: 16px;
+    }
+
+    .glass-hover:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    /* Glow effects */
+    .glow-indigo {
+      box-shadow: 0 0 40px var(--glow-indigo);
+    }
+
+    .glow-violet {
+      box-shadow: 0 0 40px var(--glow-violet);
+    }
+
+    .glow-sm {
+      box-shadow: 0 0 20px rgba(129, 140, 248, 0.1);
+    }
+
+    /* Gradient text */
+    .gradient-text {
+      background: linear-gradient(135deg, var(--accent-indigo), var(--accent-violet));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Gradient border */
+    .gradient-border {
+      position: relative;
+    }
+
+    .gradient-border::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 17px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(129, 140, 248, 0.3), rgba(167, 139, 250, 0.1), rgba(129, 140, 248, 0.3));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
       }
-      /* Custom scrollbar for webkit */
-      ::-webkit-scrollbar {
-        width: 8px;
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
-      ::-webkit-scrollbar-track {
-        background: #f1f1f1; 
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
       }
-      ::-webkit-scrollbar-thumb {
-        background: #cbd5e1; 
-        border-radius: 4px;
+
+      to {
+        opacity: 1;
       }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8; 
+    }
+
+    @keyframes pulse-glow {
+
+      0%,
+      100% {
+        opacity: 0.4;
       }
-    </style>
+
+      50% {
+        opacity: 0.8;
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes countDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes spin-slow {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    .animate-fade-in-up {
+      animation: fadeInUp 0.5s ease-out forwards;
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    .animate-slide-down {
+      animation: slideDown 0.3s ease-out forwards;
+    }
+
+    .animate-pulse-glow {
+      animation: pulse-glow 3s ease-in-out infinite;
+    }
+
+    .animate-spin-slow {
+      animation: spin-slow 12s linear infinite;
+    }
+
+    .animate-shimmer {
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+      background-size: 200% 100%;
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    /* Stagger children */
+    .stagger>* {
+      opacity: 0;
+      animation: fadeInUp 0.5s ease-out forwards;
+    }
+
+    .stagger>*:nth-child(1) {
+      animation-delay: 0.05s;
+    }
+
+    .stagger>*:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .stagger>*:nth-child(3) {
+      animation-delay: 0.15s;
+    }
+
+    .stagger>*:nth-child(4) {
+      animation-delay: 0.2s;
+    }
+
+    .stagger>*:nth-child(5) {
+      animation-delay: 0.25s;
+    }
+
+    /* Dark inputs */
+    .dark-input {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+      border-radius: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .dark-input:focus {
+      outline: none;
+      border-color: var(--accent-indigo);
+      box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .dark-input::placeholder {
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    .dark-input option {
+      background: #1a1a2e;
+      color: #f1f1f8;
+    }
+
+    /* Tab styles */
+    .tab-btn {
+      padding: 8px 20px;
+      border-radius: 10px;
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--text-secondary);
+      transition: all 0.25s ease;
+      border: 1px solid transparent;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-btn.active {
+      color: white;
+      background: linear-gradient(135deg, rgba(129, 140, 248, 0.2), rgba(167, 139, 250, 0.2));
+      border-color: rgba(129, 140, 248, 0.3);
+      box-shadow: 0 0 20px rgba(129, 140, 248, 0.1);
+    }
+
+    /* Pomodoro ring */
+    .pomodoro-ring {
+      transform: rotate(-90deg);
+      filter: drop-shadow(0 0 8px rgba(129, 140, 248, 0.4));
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Button shine */
+    .btn-shine {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-shine::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(transparent, rgba(255, 255, 255, 0.05), transparent);
+      transform: rotate(45deg);
+      transition: all 0.5s ease;
+      opacity: 0;
+    }
+
+    .btn-shine:hover::after {
+      opacity: 1;
+      left: 100%;
+    }
+  </style>
   <script type="importmap">
 {
   "imports": {
@@ -41,10 +334,12 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
+  <link rel="stylesheet" href="/index.css">
 </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-  </body>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+
 </html>

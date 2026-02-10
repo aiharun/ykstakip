@@ -29,3 +29,16 @@ export interface DailyStats {
   totalDuration: number;
   subjectBreakdown: { name: string; value: number }[];
 }
+
+export interface SubjectScore {
+  correct: number;
+  incorrect: number;
+}
+
+export interface DenemeEntry {
+  id: string;
+  exam_type: 'TYT' | 'AYT';
+  scores: Record<string, SubjectScore>;
+  total_net: number;
+  created_at: string;
+}
